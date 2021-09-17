@@ -1,0 +1,32 @@
+Resources:
+  UserDanny:
+    Type: AWS::IAM::User
+    Properties:
+      Groups:
+        - administrators
+      UserName: danny
+  UserDemitri:
+    Type: AWS::IAM::User
+    Properties:
+      Groups:
+        - administrators
+      UserName: demitri
+  UserJason:
+    Type: AWS::IAM::User
+    Properties:
+      Groups:
+        - administrators
+      UserName: jason
+  UserRob:
+    Type: AWS::IAM::User
+    Properties:
+      Groups:
+        - administrators
+        - billing
+      UserName: rob
+  UserTrevan:
+    Type: AWS::IAM::User
+    Properties:
+      Groups:
+        - administrators
+      UserName: trevan

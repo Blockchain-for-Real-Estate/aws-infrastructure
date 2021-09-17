@@ -1,0 +1,13 @@
+Resources:
+  AdminGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: administrators
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+  BillingAdmin:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: billing
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/job-function/Billing
