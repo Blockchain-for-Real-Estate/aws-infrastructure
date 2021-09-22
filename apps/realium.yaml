@@ -1,0 +1,100 @@
+Parameters:
+  GithubAccessToken:
+    Type: String
+    Description: PAT from github to allow this app to setup with the repo
+
+Resources:
+  RealiumAppRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: RealiumAppRole
+      Description: Role for the frontend amplify app realium
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - amplify.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+        - arn:aws:iam::aws:policy/AmazonSNSFullAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/AdministratorAccess-Amplify
+        - arn:aws:iam::aws:policy/AWSLambda_FullAccess
+
+  RealiumApp:
+    Type: AWS::Amplify::App
+    Properties:
+      Name: realium
+      Description: Front end hosting for nextjs project realium
+      IAMServiceRole: !GetAtt RealiumAppRole.Arn
+      OauthToken: !Ref GithubAccessToken
+      Repository: https://github.com/Blockchain-for-Real-Estate/realium-web.git
+      EnvironmentVariables:
+        - Name: _LIVE_UPDATES
+          Value: '[{ "pkg": "next-version", "type": "internal", "version": "10" }]'
+      CustomRules:
+        - Source: /<*>
+          Target: /index.html
+          Status: 404-200
+      BuildSpec: |-
+        version: 1
+        frontend:
+          phases:
+            preBuild:
+              commands:
+                - npm ci
+            build:
+              commands:
+                - npm run build
+          artifacts:
+            baseDirectory: .next
+            files:
+              - '**/*'
+          cache:
+            paths:
+              - node_modules/**/*
+
+  RealiumAppBranchProd:
+    Type: AWS::Amplify::Branch
+    Properties:
+      AppId: !GetAtt RealiumApp.AppId
+      BranchName: main
+      Description: Production branch of the repository
+      EnableAutoBuild: True
+      EnablePerformanceMode: False
+      EnablePullRequestPreview: True
+      EnvironmentVariables:
+        - Name: ENV_NAME
+          Value: prod
+      Stage: PRODUCTION
+
+  RealiumAppBranchDev:
+    Type: AWS::Amplify::Branch
+    Properties:
+      AppId: !GetAtt RealiumApp.AppId
+      BranchName: develop
+      Description: develop branch of the repository
+      EnableAutoBuild: True
+      EnablePerformanceMode: False
+      EnablePullRequestPreview: True
+      EnvironmentVariables:
+        - Name: ENV_NAME
+          Value: develop
+      Stage: DEVELOPMENT
+
+  RealiumAppDomainName:
+    Type: AWS::Amplify::Domain
+    Properties:
+      AppId: !GetAtt RealiumApp.AppId
+      DomainName: robertupchurch.com
+      SubDomainSettings:
+        - BranchName: !GetAtt RealiumAppBranchProd.BranchName
+          Prefix: ""
+        - BranchName: !GetAtt RealiumAppBranchProd.BranchName
+          Prefix: www
+        - BranchName: !GetAtt RealiumAppBranchDev.BranchName
+          Prefix: develop
