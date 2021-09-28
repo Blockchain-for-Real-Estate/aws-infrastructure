@@ -1,0 +1,54 @@
+Resources:
+  #######################
+  ##### REALIUM.NET #####
+  #######################
+  DomainDNSZone:
+    Type: AWS::Route53::HostedZone
+    Properties:
+      HostedZoneConfig:
+        Comment: "Hosted zone for realium.net"
+      Name: realium.net
+
+  GoogleMXRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Comment: Connect to GSuite
+      HostedZoneId: !Ref DomainDNSZone
+      Name: realium.net
+      ResourceRecords:
+        - 1 ASPMX.L.GOOGLE.COM.
+        - 5 ALT1.ASPMX.L.GOOGLE.COM.
+        - 5 ALT2.ASPMX.L.GOOGLE.COM.
+        - 10 ALT3.ASPMX.L.GOOGLE.COM.
+        - 10 ALT4.ASPMX.L.GOOGLE.COM.
+      Type: MX
+      TTL: 3600
+
+  GoogleSPFRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Comment: SPF Record for Gsuite
+      HostedZoneId: !Ref DomainDNSZone
+      Name: "@.realium.net"
+      ResourceRecords:
+        - '"v=spf1 include:_spf.google.com ~all"'
+      Type: SPF
+      TTL: 3600
+
+  GitBookDocsRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Comment: Gitbook Docs
+      HostedZoneId: !Ref DomainDNSZone
+      Name: docs.realium.net
+      ResourceRecords:
+        - hosting.gitbook.io
+      Type: CNAME
+      TTL: 3600
+
+Outputs:
+  RealiumNetHostedZoneId:
+    Description: Hosted Zone ID for Realium.net
+    Value: !Ref DomainDNSZone
+    Export:
+      Name: RealiumNetHostedZoneId

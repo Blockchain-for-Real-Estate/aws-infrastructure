@@ -1,0 +1,40 @@
+Resources:
+  PublicDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Aliases:
+          - images.realium.net
+        Comment: Realium Public Images
+        DefaultCacheBehavior:
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          TargetOriginId: origin-1
+          ViewerProtocolPolicy: https-only
+        Enabled: true
+        HttpVersion: http2
+        Origins:
+          - ConnectionAttempts: 2
+            ConnectionTimeout: 10
+            DomainName: !ImportValue RealiumPublicBucketUrl
+            Id: origin-1
+            S3OriginConfig:
+              OriginAccessIdentity:
+                !Join [
+                  "/",
+                  ["origin-access-identity", "cloudfront", !Ref PublicOAI],
+                ]
+        PriceClass: PriceClass_100
+        ViewerCertificate:
+          AcmCertificateArn: !ImportValue RealiumNetCertificateId
+          MinimumProtocolVersion: TLSv1
+          SslSupportMethod: sni-only
+
+  PublicOAI:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: Access Identity to Public S3

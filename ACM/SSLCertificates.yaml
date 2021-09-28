@@ -1,0 +1,19 @@
+Resources:
+  RealiumNetCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: realium.net
+      DomainValidationOptions:
+        - DomainName: images.realium.net
+          HostedZoneId: !ImportValue RealiumNetHostedZoneId
+      ValidationMethod: DNS
+      Tags:
+        - Key: Name
+          Value: Realium S3 Certificate
+
+Outputs:
+  HostedZoneId:
+    Description: Hosted Zone ID for Realium.net
+    Value: !Ref RealiumNetCertificate
+    Export:
+      Name: RealiumNetCertificateId

@@ -1,0 +1,28 @@
+Resources:
+  RealiumAppRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: RealiumAppRole
+      Description: Role for the frontend amplify app
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - amplify.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+        - arn:aws:iam::aws:policy/AmazonSNSFullAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/AdministratorAccess-Amplify
+        - arn:aws:iam::aws:policy/AWSLambda_FullAccess
+
+Outputs:
+  RealiumAppRoleArn:
+    Description: Arn for the realium app role
+    Value: !GetAtt RealiumAppRole.Arn
+    Export:
+      Name: RealiumAppRoleArn

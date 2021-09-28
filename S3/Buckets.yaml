@@ -1,0 +1,27 @@
+Resources:
+  PublicBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead
+      BucketName: realium-public
+      Tags:
+        - Key: App
+          Value: Realium
+
+  PrivateBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      BucketName: realium-private
+
+Outputs:
+  PublicBucketUrl:
+    Description: Realium Public Regional URL
+    Value: !GetAtt PublicBucket.RegionalDomainName
+    Export:
+      Name: RealiumPublicBucketUrl
+  PrivateBucketArn:
+    Description: Realium Public Regional URL
+    Value: !GetAtt PrivateBucket.Arn
+    Export:
+      Name: RealiumPrivateBucketArn

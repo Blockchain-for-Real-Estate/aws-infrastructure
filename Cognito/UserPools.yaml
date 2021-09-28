@@ -1,0 +1,72 @@
+Resources:
+  RealiumUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: RealiumUserPool
+      AutoVerifiedAttributes:
+        - email
+      EmailVerificationMessage: Your Realium verification code is {####}.
+      EmailVerificationSubject: Realium Verification Code
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Name: verified_email
+            Priority: 1
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 6
+          RequireLowercase: false
+          RequireNumbers: false
+          RequireSymbols: false
+          RequireUppercase: false
+          TemporaryPasswordValidityDays: 7
+      Schema:
+        - Name: email
+          Mutable: false
+          Required: true
+      UsernameAttributes:
+        - email
+      UsernameConfiguration:
+        CaseSensitive: false
+
+  RealiumUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref RealiumUserPool
+      CallbackURLs:
+        - http://localhost:3000/api/auth/callback/cognito
+        - https://realium.net/api/auth/callback/cognito
+      AllowedOAuthFlowsUserPoolClient: true
+      AllowedOAuthFlows:
+        - code
+      AllowedOAuthScopes:
+        - email
+        - openid
+        - profile
+      GenerateSecret: true
+      SupportedIdentityProviders:
+        - COGNITO
+
+  RealiumUserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: realium
+      UserPoolId: !Ref RealiumUserPool
+
+  RealiumHostedUI:
+    Type: AWS::Cognito::UserPoolUICustomizationAttachment
+    Properties:
+      ClientId: !Ref RealiumUserPoolClient
+      CSS: |
+        .banner-customizable {
+          background: #FFF
+        }
+        .banner-customizable {
+          background-color: #F3F4F6
+        }
+        .submitButton-customizable {
+          background-color: #6D28D9
+        }
+        .submitButton-customizable:hover {
+          background-color: #5B21B6
+        }
+      UserPoolId: !Ref RealiumUserPool
