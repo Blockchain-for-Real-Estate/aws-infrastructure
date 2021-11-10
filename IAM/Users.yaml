@@ -30,3 +30,9 @@ Resources:
       Groups:
         - administrators
       UserName: trevan
+  BotRealiumApi:
+    Type: AWS::IAM::User
+    Properties:
+      Groups:
+        - administrators
+      UserName: BotRealiumApi

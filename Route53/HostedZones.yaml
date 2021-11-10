@@ -1,19 +1,74 @@
 Resources:
   #######################
-  ##### REALIUM.NET #####
+  ##### REALIUM.IO #####
   #######################
-  DomainDNSZone:
+  RealiumIO:
     Type: AWS::Route53::HostedZone
     Properties:
       HostedZoneConfig:
-        Comment: "Hosted zone for realium.net"
-      Name: realium.net
+        Comment: "Hosted zone for realium.io"
+      Name: realium.io
+
+  WebMain:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Comment: A Record for vercel
+      HostedZoneId: !Ref RealiumIO
+      Name: "realium.io"
+      ResourceRecords:
+        - 76.76.21.21
+      Type: A
+      TTL: 3600
+
+  WebWWW:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Comment: A Record for vercel
+      HostedZoneId: !Ref RealiumIO
+      Name: "www.realium.io"
+      ResourceRecords:
+        - cname.vercel-dns.com
+      Type: CNAME
+      TTL: 3600
+
+  WebDevelop:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Comment: A Record for vercel
+      HostedZoneId: !Ref RealiumIO
+      Name: "develop.realium.io"
+      ResourceRecords:
+        - cname.vercel-dns.com
+      Type: CNAME
+      TTL: 3600
+
+  AdminMain:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Comment: A Record for vercel
+      HostedZoneId: !Ref RealiumIO
+      Name: "admin.realium.io"
+      ResourceRecords:
+        - cname.vercel-dns.com
+      Type: CNAME
+      TTL: 3600
+
+  AdminDev:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Comment: A Record for vercel
+      HostedZoneId: !Ref RealiumIO
+      Name: "develop.admin.realium.io"
+      ResourceRecords:
+        - cname.vercel-dns.com
+      Type: CNAME
+      TTL: 3600
 
   GoogleMXRecord:
     Type: AWS::Route53::RecordSet
     Properties:
       Comment: Connect to GSuite
-      HostedZoneId: !Ref DomainDNSZone
+      HostedZoneId: !Ref RealiumIO
       Name: realium.net
       ResourceRecords:
         - 1 ASPMX.L.GOOGLE.COM.
@@ -24,23 +79,34 @@ Resources:
       Type: MX
       TTL: 3600
 
+  GoogleDKIMRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Comment: DKIM Record for Gsuite
+      HostedZoneId: !Ref RealiumIO
+      Name: "google._domainkey.realium.io"
+      ResourceRecords:
+        - '"v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnEyL4sFBg4rVh0F2JnyGxIsm2w9Fxyp4XGU/Bijc046RFuNJbb30RTMs4b0/7+twfhexG0/O5htFEu8/XmCvWcmbx5HnC55T+J34/g3gGnnl""Rj+bNbC+WnNL3T8YfzRYp4c6ND/9XCabD6zwAHrwSeAeMOD27cdxkOs9fyKx5W5UkaUv1btniqWbJX40OIOMuguMHy2EdYJvCpAbMW5he1oL4xgK/sA/dUwjFxGC8ISdr7P7aD4EVj+E6Mm4iJTrdM4zgqNaa6K7yfm+Wk+8CUuvWLUO9QH26MP08JqWHvhf4tp5HA3vbGoBd5cnSvVIRB9+MIfpOhA4baecW7r5OwIDAQAB"'
+      Type: TXT
+      TTL: 3600
+
   GoogleSPFRecord:
     Type: AWS::Route53::RecordSet
     Properties:
       Comment: SPF Record for Gsuite
-      HostedZoneId: !Ref DomainDNSZone
-      Name: "@.realium.net"
+      HostedZoneId: !Ref RealiumIO
+      Name: "@.realium.io"
       ResourceRecords:
         - '"v=spf1 include:_spf.google.com ~all"'
-      Type: SPF
+      Type: TXT
       TTL: 3600
 
-  GitBookDocsRecord:
+  DocsRecord:
     Type: AWS::Route53::RecordSet
     Properties:
       Comment: Gitbook Docs
-      HostedZoneId: !Ref DomainDNSZone
-      Name: docs.realium.net
+      HostedZoneId: !Ref RealiumIO
+      Name: docs.realium.io
       ResourceRecords:
         - hosting.gitbook.io
       Type: CNAME
@@ -49,6 +115,6 @@ Resources:
 Outputs:
   RealiumNetHostedZoneId:
     Description: Hosted Zone ID for Realium.net
-    Value: !Ref DomainDNSZone
+    Value: !Ref RealiumIO
     Export:
       Name: RealiumNetHostedZoneId
