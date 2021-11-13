@@ -1,20 +1,20 @@
 Resources:
   #######################
-  ##### REALIUM.IO #####
+  ##### REALIUM.net #####
   #######################
   RealiumIO:
     Type: AWS::Route53::HostedZone
     Properties:
       HostedZoneConfig:
-        Comment: "Hosted zone for realium.io"
-      Name: realium.io
+        Comment: "Hosted zone for realium.net"
+      Name: realium.net
 
   WebMain:
     Type: AWS::Route53::RecordSet
     Properties:
       Comment: A Record for vercel
       HostedZoneId: !Ref RealiumIO
-      Name: "realium.io"
+      Name: "realium.net"
       ResourceRecords:
         - 76.76.21.21
       Type: A
@@ -25,7 +25,7 @@ Resources:
     Properties:
       Comment: A Record for vercel
       HostedZoneId: !Ref RealiumIO
-      Name: "www.realium.io"
+      Name: "www.realium.net"
       ResourceRecords:
         - cname.vercel-dns.com
       Type: CNAME
@@ -36,7 +36,7 @@ Resources:
     Properties:
       Comment: A Record for vercel
       HostedZoneId: !Ref RealiumIO
-      Name: "develop.realium.io"
+      Name: "develop.realium.net"
       ResourceRecords:
         - cname.vercel-dns.com
       Type: CNAME
@@ -47,7 +47,7 @@ Resources:
     Properties:
       Comment: A Record for vercel
       HostedZoneId: !Ref RealiumIO
-      Name: "admin.realium.io"
+      Name: "admin.realium.net"
       ResourceRecords:
         - cname.vercel-dns.com
       Type: CNAME
@@ -58,7 +58,7 @@ Resources:
     Properties:
       Comment: A Record for vercel
       HostedZoneId: !Ref RealiumIO
-      Name: "develop.admin.realium.io"
+      Name: "develop.admin.realium.net"
       ResourceRecords:
         - cname.vercel-dns.com
       Type: CNAME
@@ -84,7 +84,7 @@ Resources:
     Properties:
       Comment: DKIM Record for Gsuite
       HostedZoneId: !Ref RealiumIO
-      Name: "google._domainkey.realium.io"
+      Name: "google._domainkey.realium.net"
       ResourceRecords:
         - '"v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnEyL4sFBg4rVh0F2JnyGxIsm2w9Fxyp4XGU/Bijc046RFuNJbb30RTMs4b0/7+twfhexG0/O5htFEu8/XmCvWcmbx5HnC55T+J34/g3gGnnl""Rj+bNbC+WnNL3T8YfzRYp4c6ND/9XCabD6zwAHrwSeAeMOD27cdxkOs9fyKx5W5UkaUv1btniqWbJX40OIOMuguMHy2EdYJvCpAbMW5he1oL4xgK/sA/dUwjFxGC8ISdr7P7aD4EVj+E6Mm4iJTrdM4zgqNaa6K7yfm+Wk+8CUuvWLUO9QH26MP08JqWHvhf4tp5HA3vbGoBd5cnSvVIRB9+MIfpOhA4baecW7r5OwIDAQAB"'
       Type: TXT
@@ -95,7 +95,7 @@ Resources:
     Properties:
       Comment: SPF Record for Gsuite
       HostedZoneId: !Ref RealiumIO
-      Name: "@.realium.io"
+      Name: "@.realium.net"
       ResourceRecords:
         - '"v=spf1 include:_spf.google.com ~all"'
       Type: TXT
@@ -106,7 +106,7 @@ Resources:
     Properties:
       Comment: Gitbook Docs
       HostedZoneId: !Ref RealiumIO
-      Name: docs.realium.io
+      Name: docs.realium.net
       ResourceRecords:
         - hosting.gitbook.io
       Type: CNAME
