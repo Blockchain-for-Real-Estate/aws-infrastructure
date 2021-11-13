@@ -40,7 +40,7 @@ Resources:
           Required: false
         - Name: wallet
           AttributeDataType: String
-          Mutable: false
+          Mutable: true
           Required: false
         - Name: country
           AttributeDataType: String
